@@ -1,0 +1,6 @@
+div.card.card-block
+  h4 = link_to question_path(item), class: 'card-link' do
+   = item.title
+  p.card-text = item.body
+  = link_to new_question_answer_path(item), class: 'card-link' do
+    | Add answer

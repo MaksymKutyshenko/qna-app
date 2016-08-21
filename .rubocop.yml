@@ -5,6 +5,10 @@ AllCops:
     - 'lib/**/*.rb'
     - 'lib/**/*.rake'
   Exclude:
+    - 'config/initializers/backtrace_silencers.rb'
+    - 'config/environments/*'
+    - 'config/application.rb'
+    - 'config/puma.rb'
     - 'vendor/**/*'
     - 'spec/**/*'
     - 'db/**/*.rb'
