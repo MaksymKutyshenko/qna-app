@@ -1,0 +1,5 @@
+h4 Question: = @question.title
+div = @question.body
+= form_for [@question, @answer] do |f|
+  = render partial: 'form', locals: {f: f}
+  

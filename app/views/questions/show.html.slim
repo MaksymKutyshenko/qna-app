@@ -1,0 +1,5 @@
+= render @question
+- unless @question.answers.blank?
+    - @question.answers.each do |a|
+      div = a.body
+  
