@@ -3,5 +3,5 @@ h1 Questions:
   div No questions found
 - else 
   - @questions.each do |q|
-    = render partial: 'item', locals: { item: q }
+    = render @questions
    

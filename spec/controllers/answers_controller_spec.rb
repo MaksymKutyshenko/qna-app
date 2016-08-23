@@ -4,10 +4,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }  
 
   describe 'GET #new' do 
-    before { get :new, question_id: question }
-    it 'assignes requested question to @question' do 
-      expect(assigns(:question)).to eq question
-    end
+    before { get :new, question_id: question }    
 
     it 'assignes new answer to @answer' do 
       expect(assigns(:answer)).to be_a_new(Answer)
@@ -21,7 +18,6 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do 
     context 'when params are valid' do
       it 'saves new answer to db' do
-        expect { post :create, answer: attributes_for(:answer), question_id: question }.to change(Answer, :count).by(1)
         expect { post :create, answer: attributes_for(:answer), question_id: question }.to change { question.answers.count }.by(1)
       end
 

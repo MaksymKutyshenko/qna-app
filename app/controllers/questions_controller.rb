@@ -15,7 +15,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(item_params)
+    @question = Question.new(question_params)
     if @question.save
       redirect_to @question
     else
@@ -24,7 +24,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(item_params)
+    if @question.update(question_params)
       redirect_to @question
     else
       render :edit
@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
   end
 
-  def item_params
+  def question_params
     params.require(:question).permit(:title, :body)
   end
 end
