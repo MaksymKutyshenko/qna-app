@@ -19,7 +19,7 @@ feature 'Create answer', %q{
     expect(page).to have_content 'Your answer successfully created'    
   end
 
-  scenario 'Non-authenticated user creates answers' do 
+  scenario 'Non-authenticated user does not create answers' do 
     question.save!
     visit questions_path
     click_on('Create answer')
