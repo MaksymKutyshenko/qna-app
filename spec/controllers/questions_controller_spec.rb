@@ -44,7 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
-    context 'with valid attributes' do 
+    context 'when attributes are valid' do 
       it 'saves the new question in the database' do
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
       end
@@ -54,7 +54,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'with invalid attributes' do
+    context 'when attributes are invalid' do
       it 'does not save the question' do
         expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
       end
@@ -99,12 +99,12 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'invalid attributes' do 
+    context 'when invalid attributes' do 
       before { patch :update, id: question, question: { title: 'new title', body: nil } }
       it 'does not change question attributes' do 
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to eq 'Question title'
+        expect(question.body).to eq 'Question body'
       end
 
       it 're-renders edit view' do
@@ -115,9 +115,19 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do 
     sign_in_user
-    before { question }
-    it 'deletes question' do      
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+
+    context 'when current user is owner' do
+      before { question.update_attribute(:user_id, @user.id) }
+      it 'deletes question' do      
+        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      end
+    end
+    
+    context 'when current user is not owner' do
+      let!(:some_user) { create(:user_with_questions) }
+      it 'does not delete question' do              
+        expect { delete :destroy, id: some_user.questions.first }.to_not change(Question, :count)
+      end
     end
 
     it 'redirect to index view' do 

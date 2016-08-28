@@ -30,6 +30,7 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :feature
   config.extend ControllerMacros, type: :controller # type - only for controllers
   config.include AcceptanceHelper, type: :feature # type - only for features
 

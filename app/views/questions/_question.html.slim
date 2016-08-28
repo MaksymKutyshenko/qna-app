@@ -3,4 +3,7 @@ div.card.card-block
    = question.title
   p.card-text = question.body
   = link_to new_question_answer_path(question), class: 'card-link' do
-    | Create answer
+    | Create answer    
+  - if user_signed_in? && current_user.id == question.user_id
+    = link_to question_path(question), method: :delete do
+      | Delete

@@ -14,7 +14,7 @@ feature 'Create answer', %q{
     question.save!
     visit questions_path
     click_on('Create answer')
-    fill_in 'Body', with: 'Answer textcont'
+    fill_in 'Body', with: 'Answer text'
     click_on 'Create'
     expect(page).to have_content 'Your answer successfully created'    
   end

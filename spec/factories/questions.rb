@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :question do
     title "Question title"
-    body "Question body"
+    body "Question body"     
+    user
   end
 
   factory :invalid_question, class: 'Question' do
@@ -11,7 +12,9 @@ FactoryGirl.define do
 
   factory :question_with_answers, class: 'Question' do
     title "Question title"
-    body "Question body"
+    body "Question body"          
+    user
+
     transient do
       answers_count 2
     end
