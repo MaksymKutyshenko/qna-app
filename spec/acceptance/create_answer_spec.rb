@@ -19,7 +19,6 @@ feature 'Create answer', %q{
 
   scenario 'Non-authenticated user does not create answers' do 
     visit question_path(question)
-    click_on('Create answer')
-    expect(page).to have_content 'You need to sign in or sign up before continuing.' 
+    expect(page).to_not have_button 'Create answer'
   end
 end
