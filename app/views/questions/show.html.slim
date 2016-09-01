@@ -1,8 +1,20 @@
-= render @question
+/!= render @question
+div.card.card-block
+  h4= @question.title
+  p.card-text= @question.body
+  = form_for [@question, @answer] do |f|
+    div= f.label :body
+    div= f.text_area :body
+    div= f.submit "Create answer"
+      
+  - if user_signed_in? && current_user.id == @question.user_id
+    = link_to question_path(question), method: :delete do
+      | Delete
+
 - unless @question.answers.blank?
-    - @question.answers.each do |a|
-      div = a.body
-      - if user_signed_in? && a.user_id == current_user.id
-        = link_to question_answer_path(@question, a), method: :delete
-          'Delete'
+  - @question.answers.each do |a|
+    div = a.body
+    - if user_signed_in? && a.user_id == current_user.id
+      = link_to question_answer_path(@question, a), method: :delete
+        'Delete'
   

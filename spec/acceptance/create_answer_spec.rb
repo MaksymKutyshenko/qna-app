@@ -7,21 +7,18 @@ feature 'Create answer', %q{
 } do 
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
  
   scenario 'Authenticated user creates answers' do    
     sign_in(user)       
-    question.save!
-    visit questions_path
-    click_on('Create answer')
+    visit question_path(question)
     fill_in 'Body', with: 'Answer text'
-    click_on 'Create'
+    click_on('Create answer')
     expect(page).to have_content 'Your answer successfully created'    
   end
 
   scenario 'Non-authenticated user does not create answers' do 
-    question.save!
-    visit questions_path
+    visit question_path(question)
     click_on('Create answer')
     expect(page).to have_content 'You need to sign in or sign up before continuing.' 
   end
