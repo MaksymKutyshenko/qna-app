@@ -15,6 +15,7 @@ feature 'Create answer', %q{
     fill_in 'Body', with: 'Answer text'
     click_on('Create answer')
     expect(page).to have_content 'Your answer successfully created'    
+    expect(page).to have_content 'Answer text'    
   end
 
   scenario 'Non-authenticated user does not create answers' do 

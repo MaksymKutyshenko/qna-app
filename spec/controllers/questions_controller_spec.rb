@@ -47,6 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'when attributes are valid' do 
       it 'saves the new question in the database' do
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect(assigns(:question).user_id).to eq @user.id
       end
       it 'redirects to show view' do 
          post :create, question: attributes_for(:question)
@@ -103,8 +104,8 @@ RSpec.describe QuestionsController, type: :controller do
       before { patch :update, id: question, question: { title: 'new title', body: nil } }
       it 'does not change question attributes' do 
         question.reload
-        expect(question.title).to eq 'Question title'
-        expect(question.body).to eq 'Question body'
+        expect(question.title).to_not eq 'new title'
+        expect(question.body).to_not eq nil
       end
 
       it 're-renders edit view' do
@@ -121,6 +122,10 @@ RSpec.describe QuestionsController, type: :controller do
       it 'deletes question' do      
         expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
       end
+      it 'redirect to index view' do 
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
     
     context 'when current user is not owner' do
@@ -128,11 +133,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not delete question' do              
         expect { delete :destroy, id: some_user.questions.first }.to_not change(Question, :count)
       end
-    end
-
-    it 'redirect to index view' do 
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
     end
   end
 end

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :question do
-    title "Question title"
-    body "Question body"     
+    sequence(:title) { |n| "Question title - #{n}" }
+    sequence(:body) { |n| "Question body - #{n}" }
     user
   end
 
@@ -11,8 +11,8 @@ FactoryGirl.define do
   end
 
   factory :question_with_answers, class: 'Question' do
-    title "Question title"
-    body "Question body"          
+    sequence(:title) { |n| "Question title - #{n}" }
+    sequence(:body) { |n| "Question body - #{n}" }           
     user
 
     transient do

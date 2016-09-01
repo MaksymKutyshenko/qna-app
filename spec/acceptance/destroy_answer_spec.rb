@@ -15,11 +15,12 @@ feature 'User deletes answer', %q{
     visit question_path(question)
     click_on 'Delete'
     expect(page).to have_content 'Answer has been successfully deleted'
+    expect(page).to_not have_content answer.body
   end
 
   scenario 'Non-authenticated user is trying to delete not his answer' do     
     sign_in(some_user)
     visit question_path(question)
-    expect(page).to_not have_content 'Delete'
+    expect(page).to_not have_link 'Delete'
   end
 end

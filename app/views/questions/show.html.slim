@@ -8,13 +8,13 @@ div.card.card-block
       div= f.submit "Create answer"
         
   - if user_signed_in? && current_user.author_of?(@question)
-    = link_to question_path(question), method: :delete do
+    = link_to @question, method: :delete do
       | Delete
 
 - unless @question.answers.blank?
   - @question.answers.each do |a|
     div = a.body
     - if user_signed_in? && current_user.author_of?(a)
-      = link_to question_answer_path(@question, a), method: :delete
+      = link_to [@question, a], method: :delete
         | Delete
   
