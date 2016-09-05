@@ -7,6 +7,6 @@ class User < ApplicationRecord
   has_many :answers, dependent: :destroy
 
   def author_of?(resource)
-    return self.id == resource.user_id
+    self.id == resource.user_id
   end
 end

@@ -14,8 +14,15 @@ feature 'Create answer', %q{
     visit question_path(question)
     fill_in 'Body', with: 'Answer text'
     click_on('Create answer')
-    expect(page).to have_content 'Your answer successfully created'    
     expect(page).to have_content 'Answer text'    
+  end
+
+  scenario 'User can see system messages' do 
+    sign_in(user)       
+    visit question_path(question)
+    fill_in 'Body', with: ''
+    click_on('Create answer')
+    expect(page).to have_content 'Body can\'t be blank'    
   end
 
   scenario 'Non-authenticated user does not create answers' do 

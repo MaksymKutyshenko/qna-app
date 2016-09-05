@@ -18,8 +18,13 @@ feature 'User deletes answer', %q{
     expect(page).to_not have_content answer.body
   end
 
-  scenario 'Non-authenticated user is trying to delete not his answer' do     
+  scenario 'Authenticated user is trying to delete not his answer' do     
     sign_in(some_user)
+    visit question_path(question)
+    expect(page).to_not have_link 'Delete'
+  end
+
+  scenario 'Non-authenticated user is trying to delete answer' do
     visit question_path(question)
     expect(page).to_not have_link 'Delete'
   end

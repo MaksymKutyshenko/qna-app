@@ -8,6 +8,8 @@ class AnswersController < ApplicationController
     @answer.user = current_user
     if @answer.save
       flash[:success] = 'Your answer successfully created'
+    else
+      flash[:danger] = @answer.errors.full_messages.to_sentence
     end
     redirect_to @question
   end
@@ -17,6 +19,8 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.destroy
       flash[:success] = 'Answer has been successfully deleted'
+    else
+      flash[:danger] = 'You have no rights to perform this action'
     end
     redirect_to question
   end

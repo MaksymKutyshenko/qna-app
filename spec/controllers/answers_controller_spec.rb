@@ -8,6 +8,10 @@ RSpec.describe AnswersController, type: :controller do
     context 'when params are valid' do
       it 'saves new answer to db' do 
         expect { post :create, answer: attributes_for(:answer), question_id: question }.to change { question.answers.count }.by(1)
+      end
+
+      it 'assigns current user to answer' do
+        post :create, answer: attributes_for(:answer), question_id: question 
         expect(assigns(:answer).user_id).to eq @user.id
       end
 
@@ -48,6 +52,11 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'does not delete question' do              
         expect { delete :destroy, question_id: question, id: some_answer }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to question show view' do 
+        delete :destroy, question_id: question, id: some_answer
+        expect(response).to redirect_to question
       end
     end
   end

@@ -23,6 +23,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns the requested question to @question' do 
       expect(assigns(:question)).to eq question
     end
+
     it 'renders show view' do 
       expect(response).to render_template :show  
     end
@@ -47,8 +48,13 @@ RSpec.describe QuestionsController, type: :controller do
     context 'when attributes are valid' do 
       it 'saves the new question in the database' do
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+      end
+
+      it 'assigns current user to question' do
+        post :create, question: attributes_for(:question) 
         expect(assigns(:question).user_id).to eq @user.id
       end
+
       it 'redirects to show view' do 
          post :create, question: attributes_for(:question)
          expect(response).to redirect_to question_path(assigns(:question)) 
@@ -132,6 +138,11 @@ RSpec.describe QuestionsController, type: :controller do
       let!(:some_user) { create(:user_with_questions) }
       it 'does not delete question' do              
         expect { delete :destroy, id: some_user.questions.first }.to_not change(Question, :count)
+      end
+
+      it 'redirects to index' do 
+        delete :destroy, id: some_user.questions.first
+        expect(response).to redirect_to questions_path
       end
     end
   end

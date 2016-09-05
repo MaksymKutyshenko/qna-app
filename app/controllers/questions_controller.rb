@@ -24,6 +24,7 @@ class QuestionsController < ApplicationController
       flash[:success] = 'Your question successfully created'
       redirect_to @question
     else
+      flash[:danger] = @question.errors.full_messages.to_sentence
       render :new
     end
   end
@@ -40,6 +41,8 @@ class QuestionsController < ApplicationController
     if current_user.author_of?(@question)
       @question.destroy
       flash[:success] = 'Your question has been successfully deleted!'
+    else
+      flash[:danger] = 'You have no rights to perform this action'
     end
     redirect_to questions_path
   end
