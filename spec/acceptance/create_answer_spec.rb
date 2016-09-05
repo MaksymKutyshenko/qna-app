@@ -14,6 +14,7 @@ feature 'Create answer', %q{
     visit question_path(question)
     fill_in 'Body', with: 'Answer text'
     click_on('Create answer')
+    expect(page).to have_content 'Your answer successfully created'    
     expect(page).to have_content 'Answer text'    
   end
 
