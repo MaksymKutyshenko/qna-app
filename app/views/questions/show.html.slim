@@ -3,6 +3,10 @@ div.card.card-block
   p.card-text= @question.body
   - if user_signed_in?
     = form_for [@question, @answer] do |f|
+
+      - if @answer.errors.any?
+        = @answer.errors.full_messages.to_sentence
+
       div= f.label :body
       div= f.text_area :body
       div= f.submit "Create answer"

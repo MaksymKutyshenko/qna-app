@@ -18,13 +18,11 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      flash[:success] = 'Your question successfully created'
+    @question = Question.create(question_params.merge(user: current_user))
+    if @question.errors.blank?
+      flash[:notice] = 'Your question successfully created'
       redirect_to @question
     else
-      flash[:danger] = @question.errors.full_messages.to_sentence
       render :new
     end
   end
@@ -40,9 +38,9 @@ class QuestionsController < ApplicationController
   def destroy
     if current_user.author_of?(@question)
       @question.destroy
-      flash[:success] = 'Your question has been successfully deleted!'
+      flash[:notice] = 'Your question has been successfully deleted!'
     else
-      flash[:danger] = 'You have no rights to perform this action'
+      flash[:alert] = 'You have no rights to perform this action'
     end
     redirect_to questions_path
   end
