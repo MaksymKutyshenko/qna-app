@@ -1,10 +1,13 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+
   def index
     @questions = Question.all
   end
 
   def show
+    @answer = @question.answers.new
   end
 
   def new
@@ -15,8 +18,9 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    if @question.save
+    @question = Question.create(question_params.merge(user: current_user))
+    if @question.errors.blank?
+      flash[:notice] = 'Your question successfully created'
       redirect_to @question
     else
       render :new
@@ -32,7 +36,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
+    if current_user.author_of?(@question)
+      @question.destroy
+      flash[:notice] = 'Your question has been successfully deleted!'
+    else
+      flash[:alert] = 'You have no rights to perform this action'
+    end
     redirect_to questions_path
   end
 
