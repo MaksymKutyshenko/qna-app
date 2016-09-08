@@ -3,32 +3,32 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   sign_in_user
   let(:question) { create(:question) }    
-  
+
   describe 'POST #create' do
     context 'when params are valid' do
       it 'saves new answer to db' do 
-        expect { post :create, answer: attributes_for(:answer), question_id: question }.to change { question.answers.count }.by(1)
+        expect { post :create, answer: attributes_for(:answer), question_id: question, format: :js }.to change { question.answers.count }.by(1)
       end
 
       it 'assigns current user to answer' do
-        post :create, answer: attributes_for(:answer), question_id: question 
+        post :create, answer: attributes_for(:answer), question_id: question, format: :js 
         expect(assigns(:answer).user_id).to eq @user.id
       end
 
-      it 'redirects to question show view' do
-        post :create, answer: attributes_for(:answer), question_id: question
-        expect(response).to redirect_to question
+      it 'renders create template' do
+        post :create, answer: attributes_for(:answer), question_id: question, format: :js
+        expect(response).to render_template :create
       end
     end
 
     context 'when params are invalid' do 
       it 'does not save answer to db' do 
-        expect { post :create, answer: attributes_for(:invalid_answer), question_id: question }.to_not change(Answer, :count)
+        expect { post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question show view' do 
-        post :create, answer: attributes_for(:invalid_answer), question_id: question
-        expect(response).to redirect_to question
+      it 'renders create template' do 
+        post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
+        expect(response).to render_template :create
       end
     end
   end

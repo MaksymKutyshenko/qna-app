@@ -5,6 +5,6 @@
       
     = f.label :title 
     = f.text_field(:title, class: 'form-control') 
-    = f.label :body
+    = f.label :body, 'Question text'
     = f.text_area(:body, class: 'form-control')
     = f.submit 'Create', class: 'btn btn-default'
