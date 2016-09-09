@@ -1,5 +1,5 @@
 .answer
   = answer.body
   - if user_signed_in? && current_user.author_of?(answer)
-    = link_to [answer.question, answer], method: :delete
+    = link_to answer, method: :delete
       | Delete
