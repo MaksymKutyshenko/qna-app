@@ -1,0 +1,9 @@
+$('#answer_body').val("");
+$('.form-errors').html("");
+$('.notice').html("<%= notice %>");
+
+<% if @answer.errors.any? %>
+  $('.form-errors').html("<%= j render 'form_errors', errors: @answer.errors %>");
+<% else %>
+  $('.answers').append("<%= j render @answer %>");
+<% end %>

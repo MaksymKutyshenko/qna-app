@@ -13,7 +13,7 @@ feature 'Create question', %q{
     visit questions_path
     click_on 'Ask question'
     fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text'
+    fill_in 'Question text', with: 'text text'
     click_on 'Create'
     expect(page).to have_content 'Your question successfully created'    
     expect(page).to have_content 'Test question'    
@@ -25,7 +25,7 @@ feature 'Create question', %q{
     visit questions_path
     click_on 'Ask question'    
     fill_in 'Title', with: ''
-    fill_in 'Body', with: ''
+    fill_in 'Question text', with: ''
     click_on 'Create'
     expect(page).to have_content 'Title can\'t be blank and Body can\'t be blank'
   end

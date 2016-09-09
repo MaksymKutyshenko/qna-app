@@ -2,12 +2,9 @@ div.card.card-block
   h4= @question.title
   p.card-text= @question.body
   - if user_signed_in?
-    = form_for [@question, @answer] do |f|
-
-      - if @answer.errors.any?
-        = @answer.errors.full_messages.to_sentence
-
-      div= f.label :body
+    = form_for [@question, @answer], remote: true do |f|
+      .form-errors
+      div= f.label :body, 'Your answer'
       div= f.text_area :body
       div= f.submit "Create answer"
         
@@ -15,10 +12,7 @@ div.card.card-block
     = link_to @question, method: :delete do
       | Delete
 
-- unless @question.answers.blank?
-  - @question.answers.each do |a|
-    div = a.body
-    - if user_signed_in? && current_user.author_of?(a)
-      = link_to [@question, a], method: :delete
-        | Delete
+.answers
+  - if @question.answers.any?
+    = render @question.answers
   

@@ -7,10 +7,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.create(answer_params.merge(user: current_user))
     if @answer.errors.blank?
       flash[:notice] = 'Your answer successfully created'
-    else
-      flash[:alert] = @answer.errors.full_messages.to_sentence
     end
-    redirect_to @question 
   end
 
   def destroy 
