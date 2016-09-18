@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
-  before_action :load_answer, only: [:destroy]
+  before_action :load_answer, only: [:update, :destroy, :best]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
@@ -10,15 +10,34 @@ class AnswersController < ApplicationController
     end
   end
 
-  def destroy 
-    question = @answer.question
+  def update  
     if current_user.author_of?(@answer)
-      @answer.destroy
-      flash[:notice] = 'Answer has been successfully deleted'
+      @answer.update(answer_params)
+      flash[:notice] = 'Answer has been successfully updated'
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
-    redirect_to question
+  end
+
+  def destroy
+    if current_user.author_of?(@answer)
+      if @answer.destroy
+        flash[:notice] = 'Answer has been successfully deleted'
+      else
+        flash[:alert] = 'Answer has not been deleted'
+      end
+    else
+      flash[:alert] = 'You have no rights to perform this action'
+    end
+  end
+
+  def best
+    if current_user.author_of?(@answer.question)
+      @answer.best!
+      flash[:notice] = 'Best answer chosen!'
+    else
+      flash[:alert] = 'You have no rights to perform this action'
+    end
   end
 
   private

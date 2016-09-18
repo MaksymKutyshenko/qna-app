@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   sign_in_user
-  let(:question) { create(:question) }    
-
+  let!(:question) { create(:question) }    
+  let!(:answer) { create(:answer, user: @user, question: question) }
+  
   describe 'POST #create' do
     context 'when params are valid' do
       it 'saves new answer to db' do 
@@ -33,16 +34,48 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do 
+
+    context 'when current user is owner' do 
+      it 'assings the requested answer to @answer' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+     
+      it 'changes answer attributes' do
+        patch :update, id: answer, question_id: question, answer: { body: 'new body'}, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'render update template' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'when current user is not owner' do 
+      let(:some_user) { create(:user) }
+
+      it 'does not change answer attribute' do 
+        answer.update(user: some_user)
+        patch :update, id: answer, question_id: question, answer: { body: 'new body'}, format: :js
+        answer.reload
+        expect(answer.body).to_not eq 'new body'
+      end
+    end
+  end
+  
+
   describe 'DELETE #destroy' do     
-    let!(:answer) { create(:answer, user: @user, question: question) }
 
     context 'when current user is owner' do
-      it 'deletes question' do      
-        expect { delete :destroy, question_id: question, id: answer }.to change(Answer, :count).by(-1)
+      it 'deletes answer' do      
+        expect { delete :destroy, question_id: question, id: answer, format: :js }.to change(Answer, :count).by(-1)
       end
-      it 'redirects to question show view' do 
-        delete :destroy, question_id: question, id: answer
-        expect(response).to redirect_to question
+      it 'renders destroy template' do 
+        delete :destroy, question_id: question, id: answer, format: :js 
+        expect(response).to render_template :destroy
       end
     end
     
@@ -50,13 +83,47 @@ RSpec.describe AnswersController, type: :controller do
       let(:some_user) { create(:user) }
       let!(:some_answer) { create(:answer, question: question, user: some_user) }
 
-      it 'does not delete question' do              
-        expect { delete :destroy, question_id: question, id: some_answer }.to_not change(Answer, :count)
+      it 'does not delete answer' do              
+        expect { delete :destroy, question_id: question, id: some_answer, format: :js }.to_not change(Answer, :count)
+      end
+      it 'renders destroy template' do 
+        delete :destroy, question_id: question, id: some_answer, format: :js
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'POST #best' do     
+
+    context 'when current user is owner of question' do 
+      before { 
+        question.update(user: @user)
+        post :best, id: answer, format: :js
+      }
+
+      it 'assigns requested answer to answer' do 
+        expect(assigns(:answer)).to eq answer     
       end
 
-      it 'redirects to question show view' do 
-        delete :destroy, question_id: question, id: some_answer
-        expect(response).to redirect_to question
+      it 'updates best attribute of answer' do
+        answer.reload
+        expect(answer.best).to eq true
+      end
+
+      it 'renders best.js template' do 
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'when current user is not owner of question' do 
+      before { post :best, id: answer, format: :js }
+
+      it 'does not update best attribute of answer' do 
+        expect(assigns(:answer).best).to_not eq true
+      end
+
+      it 'renders best.js template' do 
+        expect(response).to render_template :best
       end
     end
   end

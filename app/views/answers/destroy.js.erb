@@ -1,0 +1,9 @@
+$('.form-errors').html("");
+$('.notice').html("<%= notice %>");
+$('.alert').html("<%= alert %>");
+
+<% if @answer.errors.any? %>
+  $('.form-errors').html("<%= j render 'form_errors', errors: @answer.errors %>");
+<% else %>
+  $('<%= ".answer-#{ @answer.id }" %>').remove();  
+<% end %>

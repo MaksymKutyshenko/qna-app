@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'User deletes answer', %q{
   An a user I want to be able to
@@ -10,7 +10,7 @@ feature 'User deletes answer', %q{
   given(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  scenario 'Authenticated user is trying to delete his answer' do 
+  scenario 'Authenticated user is trying to delete his answer', js: true do 
     sign_in(user)
     visit question_path(question)
     click_on 'Delete'
