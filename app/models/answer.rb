@@ -4,10 +4,12 @@ class Answer < ApplicationRecord
   validates :body, :question_id, :user_id, presence: true
 
   def best!
-    best_answer = question.answers.find_by(best: true)
-    if best_answer.present?
-      best_answer.update(best: false)
+    ActiveRecord::Base.transaction do
+      best_answer = question.answers.find_by(best: true)
+      if best_answer.present?
+        best_answer.update(best: false)
+      end
+      update!(best: true)
     end
-    update!(best: true)
   end
 end

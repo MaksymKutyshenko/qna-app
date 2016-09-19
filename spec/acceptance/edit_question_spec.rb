@@ -16,10 +16,6 @@ feature 'Question editing', %q{
       visit question_path(question)
     end
     
-    scenario 'sees link Edit' do
-      expect(page).to have_link 'Edit'
-    end
-
     scenario 'tries to edit his question', js: true do
       within '.question' do 
         click_on 'Edit'
@@ -34,7 +30,7 @@ feature 'Question editing', %q{
       expect(page).to have_content 'Your question has been successfully updated'
     end
 
-   scenario 'tries to edit other user\'s question' do 
+    scenario 'tries to edit other user\'s question' do 
       visit question_path(some_question)      
       within '.question' do  
         expect(page).to_not have_link 'Edit'

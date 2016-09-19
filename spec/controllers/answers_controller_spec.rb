@@ -96,13 +96,17 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #best' do     
 
     context 'when current user is owner of question' do 
-      before { 
+      before do
         question.update(user: @user)
         post :best, id: answer, format: :js
-      }
+      end
 
       it 'assigns requested answer to answer' do 
         expect(assigns(:answer)).to eq answer     
+      end
+
+      it 'assigns answers question to question' do 
+        expect(assigns(:question)).to eq answer.question     
       end
 
       it 'updates best attribute of answer' do

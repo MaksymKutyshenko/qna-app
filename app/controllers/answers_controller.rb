@@ -32,7 +32,8 @@ class AnswersController < ApplicationController
   end
 
   def best
-    if current_user.author_of?(@answer.question)
+    @question = @answer.question
+    if current_user.author_of?(@question)
       @answer.best!
       flash[:notice] = 'Best answer chosen!'
     else

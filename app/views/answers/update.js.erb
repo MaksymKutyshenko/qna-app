@@ -5,5 +5,5 @@ $('.alert').html("<%= alert %>");
 <% if @answer.errors.any? %>
   $('.form-errors').html("<%= j render 'form_errors', errors: @answer.errors %>");
 <% else %>
-  $('.answers').html("<%= j render @answer.question.answers %>");  
+  $('<%= ".answer-#{@answer.id}" %>').replaceWith("<%= j render @answer %>");    
 <% end %>

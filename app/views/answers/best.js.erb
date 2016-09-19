@@ -5,5 +5,5 @@ $('.alert').html("<%= alert %>");
 <% if @answer.errors.present? %>
   $('.form-errors').html("<%= j render 'form_errors', errors: @answer.errors %>");
 <% else %>
-  $('.answers').html("<%= j render @answer.question.answers %>");
+  $('.answers').html("<%= j render @question.answers %>");
 <% end %>
