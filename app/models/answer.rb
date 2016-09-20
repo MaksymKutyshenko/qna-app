@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
     ActiveRecord::Base.transaction do
       best_answer = question.answers.find_by(best: true)
       if best_answer.present?
-        best_answer.update(best: false)
+        best_answer.update!(best: false)
       end
       update!(best: true)
     end

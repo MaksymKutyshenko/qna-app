@@ -23,7 +23,7 @@ RSpec.describe Answer, type: :model do
     answer1.reload
     answer2.reload
 
-    expect(answer1.best).to eq false
-    expect(answer2.best).to eq true
+    expect(answer1).to_not be_best
+    expect(answer2).to be_best
   end
 end
