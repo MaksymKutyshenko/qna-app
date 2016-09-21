@@ -1,0 +1,12 @@
+$('.form-errors').html("");
+$('.alert').html("<%= alert %>");
+$('.notice').html("<%= notice %>");
+
+<% if @question.errors.any? %>
+  $('.form-errors').html("<%= j @question.errors.full_messages.to_sentence %>");
+<% else %>
+  $('.question-title').html("<%= j @question.title %>");
+  $('.question-body').html("<%= j @question.body %>");
+  $(".edit_question").hide();
+  $(".edit-question-link").show();
+<% end %>

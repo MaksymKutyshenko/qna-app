@@ -74,52 +74,53 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :new
       end
     end
-  end
-
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, id: question }
-
-    it 'assigns the requested question to @question' do 
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'renders new edit' do 
-      expect(response).to render_template :edit
-    end
-  end
+  end  
 
   describe 'PATCH #update' do 
     sign_in_user
+    before { question.update(user: @user) }
+
     context 'valid attributes' do 
+      before { patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js }
+
       it 'assigns the requested question to @question' do 
-        patch :update, id: question, question: attributes_for(:question)
         expect(assigns(:question)).to eq question
       end
       
       it 'changes question attributes' do 
-        patch :update, id: question, question: { title: 'new title', body: 'new body' }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
 
-      it 'redirects to the updated question' do 
-        patch :update, id: question, question: attributes_for(:question)
-        expect(response).to redirect_to question
+      it 'renders update template' do
+        expect(response).to render_template :update
       end
     end
 
     context 'when invalid attributes' do 
-      before { patch :update, id: question, question: { title: 'new title', body: nil } }
+      before { patch :update, id: question, question: { title: 'new title', body: nil }, format: :js }
+
       it 'does not change question attributes' do 
         question.reload
         expect(question.title).to_not eq 'new title'
         expect(question.body).to_not eq nil
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit 
+      it 'renders update template' do
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'when current user is not owner' do 
+      let(:some_user) { create(:user) }
+
+      it 'does not change question attributes' do 
+        question.update(user: some_user)
+        patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+        question.reload
+        expect(question.title).to_not eq 'new title'
+        expect(question.body).to_not eq 'new body'
       end
     end
   end

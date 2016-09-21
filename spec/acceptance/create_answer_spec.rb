@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create answer', %q{
   As an authenticated user
@@ -26,7 +26,9 @@ feature 'Create answer', %q{
     fill_in 'Your answer', with: ''
     click_on('Create answer')
     expect(page).to have_content 'Body can\'t be blank'
-    expect(page).to_not have_css '.answer' 
+    within '.answers' do 
+      expect(page).to_not have_css '.answer' 
+    end
   end
 
   scenario 'User can see system messages', js: true do 

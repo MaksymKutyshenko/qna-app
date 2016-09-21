@@ -1,16 +1,25 @@
-div.card.card-block
-  h4= @question.title
-  p.card-text= @question.body
+div.card.card-block.question
+  h4.question-title= @question.title
+  p.card-text.question-body= @question.body
+        
+  - if user_signed_in? && current_user.author_of?(@question)
+    = link_to @question, method: :delete do
+      | Delete
+    p= link_to 'Edit', '', class: 'edit-question-link'
+    p
+      = form_for @question, remote: true do |f|
+        p= f.label :title 
+        p= f.text_field :title 
+        p= f.label :body, 'Question text'
+        p= f.text_area :body
+        p= f.submit 'Save'
+        
   - if user_signed_in?
     = form_for [@question, @answer], remote: true do |f|
       .form-errors
       div= f.label :body, 'Your answer'
       div= f.text_area :body
       div= f.submit "Create answer"
-        
-  - if user_signed_in? && current_user.author_of?(@question)
-    = link_to @question, method: :delete do
-      | Delete
 
 .answers
   - if @question.answers.any?

@@ -1,5 +1,14 @@
-.answer
+.answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
   = answer.body
-  - if user_signed_in? && current_user.author_of?(answer)
-    = link_to answer, method: :delete
+  -if user_signed_in? && current_user.author_of?(answer.question) && !answer.best    
+    p= link_to best_answer_path(answer), method: :post, remote: true
+      | Best
+  -if user_signed_in? && current_user.author_of?(answer)
+    p= link_to answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
       | Delete
+    p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+    p
+      = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+        p= f.label :body, 'Answer'
+        p= f.text_area :body
+        p= f.submit 'Save'

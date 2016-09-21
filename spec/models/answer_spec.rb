@@ -6,4 +6,24 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
   it { should validate_presence_of :question_id }
   it { should validate_presence_of :user_id }
+
+  let!(:question) { create(:question) }
+  let!(:answer1) { create(:answer, question: question) }
+  let!(:answer2) { create(:answer, question: question) }
+
+  it 'creates best answer' do 
+    answer1.best!
+    expect(answer1.best).to eq true
+  end
+
+  it 'creates only one best onswer' do 
+    answer1.best!
+    answer2.best!
+
+    answer1.reload
+    answer2.reload
+
+    expect(answer1).to_not be_best
+    expect(answer2).to be_best
+  end
 end
