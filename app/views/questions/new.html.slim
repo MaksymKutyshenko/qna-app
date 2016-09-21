@@ -6,5 +6,11 @@
     = f.label :title 
     = f.text_field(:title, class: 'form-control') 
     = f.label :body, 'Question text'
-    = f.text_area(:body, class: 'form-control')
+    = f.text_area(:body, class: 'form-control') 
+    p Attachments:
+    p
+      = f.fields_for :attachments do |a|
+        = a.label :file
+        = a.file_field :file
+
     = f.submit 'Create', class: 'btn btn-default'
