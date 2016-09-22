@@ -1,5 +1,11 @@
 .answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
   = answer.body
+  
+  p Attachments:
+  ul
+    - answer.attachments.each do |a|
+      li= link_to a.file.filename, a.file.url 
+
   -if user_signed_in? && current_user.author_of?(answer.question) && !answer.best    
     p= link_to best_answer_path(answer), method: :post, remote: true
       | Best
@@ -11,4 +17,5 @@
       = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
         p= f.label :body, 'Answer'
         p= f.text_area :body
+      
         p= f.submit 'Save'

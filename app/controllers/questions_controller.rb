@@ -8,11 +8,12 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @answer.attachments.build
   end
 
   def new
     @question = Question.new
-    @question.attachments.new
+    @question.attachments.build
   end
 
   def create
