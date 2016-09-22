@@ -4,8 +4,9 @@ div.card.card-block.question
   p Attachments:
   ul
     - @question.attachments.each do |a|
-      li= a.file.file.filename
-      
+      li=link_to a.file.filename, a.file.url 
+        
+
   - if user_signed_in? && current_user.author_of?(@question)
     = link_to @question, method: :delete do
       | Delete
