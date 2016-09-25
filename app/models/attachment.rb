@@ -1,4 +1,4 @@
 class Attachment < ApplicationRecord
-  belongs_to :attachmentable, polymorphic: true, optional: true
+  belongs_to :attachable, polymorphic: true, optional: true
   mount_uploader :file, FileUploader
 end
