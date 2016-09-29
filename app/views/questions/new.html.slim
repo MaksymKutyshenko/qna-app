@@ -12,5 +12,5 @@
       = f.fields_for :attachments do |a|
         = a.label :file
         = a.file_field :file
-
+        = link_to_add_association 'add file', f, :attachments
     = f.submit 'Create', class: 'btn btn-default'

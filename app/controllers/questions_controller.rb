@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
     if @question.errors.blank?
       flash[:notice] = 'Your question successfully created'
       redirect_to @question
-    else
+    else      
       render :new
     end
   end
@@ -57,6 +57,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, attachments_attributes: [:file])
+    params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
   end
 end

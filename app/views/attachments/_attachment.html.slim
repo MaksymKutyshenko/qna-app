@@ -1,0 +1,4 @@
+div class="attachment attachment-#{attachment.id}"  
+  = link_to attachment.file.filename, attachment.file.url
+  - if user_signed_in? && current_user.author_of?(attachment.attachable) 
+    = link_to 'Delete file', attachment_path(attachment), method: :delete, data: { confirm: "Are you sure?" }, remote: true
