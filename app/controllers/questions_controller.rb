@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :update, :destroy]
 
@@ -52,6 +54,7 @@ class QuestionsController < ApplicationController
   end
 
   private
+
   def load_question
     @question = Question.find(params[:id])
   end
