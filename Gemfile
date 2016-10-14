@@ -64,6 +64,7 @@ end
 
 group :test do 
   gem 'shoulda-matchers'
+  gem 'with_model'
   gem 'capybara'
   gem 'launchy'
 end

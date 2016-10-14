@@ -12,11 +12,7 @@ handleRateSuccess = (e, data) ->
   ratingBlock.find('.unrate-button, .rate-button').toggle()
 
 ready = ->   
-  $('.rate-button')
-    .bind('ajax:success', handleRateSuccess)
-    .bind('ajax:error', handleRateErrors)
-
-  $('.unrate-button')
+  $('.rate-button, .unrate-button')
     .bind('ajax:success', handleRateSuccess)
     .bind('ajax:error', handleRateErrors)
 
