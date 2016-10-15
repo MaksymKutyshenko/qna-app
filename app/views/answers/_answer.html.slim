@@ -1,6 +1,7 @@
 .answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
-  = answer.body
-  
+  .answer-body = answer.body
+  = render 'shared/rating', votable: answer
+
   p Attachments:
   div
     - answer.attachments.each do |attachment|

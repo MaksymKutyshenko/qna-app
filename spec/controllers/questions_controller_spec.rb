@@ -133,6 +133,71 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'PATCH #rate' do
+    sign_in_user
+
+    context 'when user is not owner' do 
+      it 'updates question votes count' do 
+        expect { patch :rate, id: question, rating: 1, format: :json }.to change(question.votes, :count).by(1)
+      end
+
+      it 'sets question rating to be equal 1' do
+        patch :rate, id: question, rating: 1, format: :json
+        expect(assigns(:votable).rating).to eq(1)
+      end
+
+      it 'sets question rating to be equal -1' do
+        patch :rate, id: question, rating: -1, format: :json
+        expect(assigns(:votable).rating).to eq(-1)
+      end
+
+      it 'responses with status code 200' do
+        patch :rate, id: question, rating: -1, format: :json
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'when user is owner' do 
+      before { question.update(user: @user) }
+
+      it 'does not sets question rating' do 
+        patch :rate, id: question, rating: 1, format: :json
+        expect(assigns(:votable).rating).to eq(0)          
+      end
+      it 'responses with status 403' do
+        patch :rate, id: question, rating: 1, format: :json
+        expect(response.status).to eq(403)
+      end
+    end
+  end
+
+  describe 'DELETE #unrate' do
+    sign_in_user
+    let!(:question) { create(:question) }
+
+    context 'when user is vote owner', format: :json do 
+      let!(:vote) { create(:vote, user: @user, rating: 1, votable: question) }
+      it 'remove question vote' do
+        expect { delete :unrate, id: question }.to change(Vote, :count).by(-1)
+      end
+      
+      it 'responses with status 200' do 
+        expect(response.status).to eq(200)
+      end  
+    end
+
+    context 'when user is not vote owner', format: :json do 
+      it 'does not delete vote' do
+        expect { delete :unrate, id: question }.to_not change(Vote, :count)
+      end
+
+      it 'responses with status 403' do 
+        delete :unrate, id: question
+        expect(response.status).to eq(403)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do 
     sign_in_user
 
