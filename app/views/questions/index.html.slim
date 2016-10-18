@@ -1,6 +1,7 @@
 h1 Questions:
-- if @questions.empty?
-  div No questions found
-- else 
-  = render @questions
+.questions-list
+  - if @questions.empty?
+    | No questions found
+  - else 
+    = render @questions
      
