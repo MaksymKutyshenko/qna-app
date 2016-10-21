@@ -15,7 +15,7 @@ ready = ->
   $('.rate-button, .unrate-button')
     .bind('ajax:success', handleRateSuccess)
     .bind('ajax:error', handleRateErrors)
-
+    
 $(document).ready(ready) 
 $(document).on('page:load', ready)  
 $(document).on('page:update', ready)

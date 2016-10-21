@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :update, :destroy]
+  before_action :gon_question, only: [:show]
 
   after_action :publish_question, only: [:create]
 
@@ -12,7 +13,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @answer.attachments.build
+    @answer.attachments.build    
   end
 
   def new
@@ -66,6 +67,10 @@ class QuestionsController < ApplicationController
         locals: { question: @question }
       )
     ) 
+  end
+
+  def gon_question
+    gon.question = @question
   end
 
   def load_question

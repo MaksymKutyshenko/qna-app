@@ -20,6 +20,7 @@
 //= require bootstrap-sprockets
 //= require bootstrap
 //= require cocoon
+//= require skim
 
 var App = App || {};
 App.cable = ActionCable.createConsumer();

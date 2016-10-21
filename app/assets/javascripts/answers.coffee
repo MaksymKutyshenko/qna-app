@@ -1,6 +1,3 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
 handleEditLinkClick = (e) ->
   e.preventDefault()
   $(this).hide()
@@ -9,6 +6,14 @@ handleEditLinkClick = (e) ->
 
 ready = ->
   $(document).on('click', '.edit-answer-link', handleEditLinkClick)    
+
+  gon.question && App.cable.subscriptions.create('AnswersChannel', {
+    connected: ->
+      @perform 'follow', question_id: gon.question.id
+    received: (data) -> 
+      console.log(data.answer)
+      $('.answers').append(App.helper.render('answers/answer', data.answer))
+  })
 
 $(document).ready(ready) 
 $(document).on('page:load', ready)  

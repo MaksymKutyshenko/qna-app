@@ -8,8 +8,7 @@ ready = ->
 
   App.cable.subscriptions.create('QuestionsChannel', {
     connected: ->
-      @perform 'follow'
-    ,  
+      @perform 'follow' 
     received: (data) ->
       questionsList.append(data)
   })

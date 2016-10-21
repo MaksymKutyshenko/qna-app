@@ -18,7 +18,6 @@ feature 'Add files to answer', %q{
       fill_in 'Your answer', with: 'My answer'
       attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
       click_on 'Create'
-      
       within '.answers' do
         expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/1/rails_helper.rb'
       end 

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
+  let(:gon) { RequestStore.store[:gon].gon }
 
   describe 'GET #index' do    
     let(:questions) { create_list(:question, 2) }
@@ -30,6 +31,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'builds new attachment for answer' do 
       expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
+
+    it 'assigns @question to gon.question' do 
+      expect(gon['question']).to eq question
     end
 
     it 'renders show view' do 
