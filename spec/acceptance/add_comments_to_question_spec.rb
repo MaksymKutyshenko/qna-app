@@ -8,6 +8,9 @@ feature 'Add comments', %q{
  
   given!(:user) { create(:user) }
   given!(:question) { create(:question) }
+  given!(:question_with_comments) { create(:question) }
+  given!(:comment1) { create(:comment, user: user, commentable: question_with_comments) }
+  given!(:comment2) { create(:comment, user: user, commentable: question_with_comments) }
 
   describe 'Authenticated user' do 
     before { sign_in(user) }
@@ -40,5 +43,14 @@ feature 'Add comments', %q{
         expect(page).to_not have_css '.new_comment'
       end
     end 
+  end
+
+  scenario 'user can see a list of created comments' do 
+    visit question_path(question_with_comments)
+
+    within '.question .comments' do 
+      expect(page).to have_content comment1.body
+      expect(page).to have_content comment2.body
+    end
   end
 end
