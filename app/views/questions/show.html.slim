@@ -7,7 +7,16 @@ div.card.card-block.question
   p Attachments:
   div
     - @question.attachments.each do |attachment|
-      = render attachment        
+      = render attachment    
+
+  .comments
+    = form_for [@question, @comment], remote: true do |f| 
+      p= f.label :body, 'Comment text'
+      p= f.text_area :body
+      p= f.submit 'Add comment'
+    - if @question.comments.any?
+      = render @question.comments
+
 
   - if user_signed_in? && current_user.author_of?(@question)
     = link_to 'Delete', @question, method: :delete
