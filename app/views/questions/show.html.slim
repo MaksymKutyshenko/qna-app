@@ -10,7 +10,7 @@ div.card.card-block.question
       = render attachment    
 
   
-  .comments
+  div class="comments comments-#{@question.id}"
     - if user_signed_in? 
       = render 'comments/form', commentable: @question
     - if @question.comments.any?

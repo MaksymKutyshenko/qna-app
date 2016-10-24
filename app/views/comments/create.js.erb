@@ -6,5 +6,5 @@ $('.notice').html('');
   $('.alert').html("<%= @comment.errors.full_messages.to_sentence %>");
 <% else %>
   $('.notice').html('Your comment cussessfully created');
-  $('.comments').append("<%= j render @comment %>");
+  $('.comments-<%= @comment.commentable.id %>').append("<%= j render @comment %>");
 <% end %>

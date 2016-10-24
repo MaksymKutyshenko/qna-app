@@ -19,7 +19,7 @@
         p= f.text_area :body     
         p= f.submit 'Save'
 
-  .comments
+  div class="comments comments-#{answer.id}"
     - if user_signed_in?
       = render 'comments/form', commentable: answer
     - if answer.comments.any?
