@@ -12,10 +12,7 @@ div.card.card-block.question
   
   .comments
     - if user_signed_in? 
-      = form_for [@question, @comment], remote: true do |f| 
-        p= f.label :body, 'Comment text'
-        p= f.text_area :body
-        p= f.submit 'Add comment'
+      = render 'comments/form', commentable: @question
     - if @question.comments.any?
       = render @question.comments
 
@@ -46,5 +43,4 @@ div.card.card-block.question
 
 .answers
   - if @question.answers.any?
-    = render @question.answers
-  
+    = render @question.answers  

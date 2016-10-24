@@ -14,7 +14,9 @@ RSpec.describe Answer, type: :model do
   it { should accept_nested_attributes_for :attachments }
 
   it { should be_a_kind_of(Votable) }
-
+  it { should be_a_kind_of(Commentable) }  
+  it { should be_a_kind_of(Attachable) }
+  
   let!(:question) { create(:question) }
   let!(:answer1) { create(:answer, question: question) }
   let!(:answer2) { create(:answer, question: question) }

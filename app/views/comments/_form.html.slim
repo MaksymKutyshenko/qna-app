@@ -1,0 +1,4 @@
+= form_for [commentable, Comment.new], html: {id: "new-comment-#{commentable.id}"}, remote: true do |f| 
+  p= f.label :body, 'Comment text'
+  p= f.text_area :body
+  p= f.submit 'Add comment'

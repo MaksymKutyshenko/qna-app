@@ -18,3 +18,9 @@
         p= f.label :body, 'Answer'
         p= f.text_area :body     
         p= f.submit 'Save'
+
+  .comments
+    - if user_signed_in?
+      = render 'comments/form', commentable: answer
+    - if answer.comments.any?
+      = render answer.comments
