@@ -66,13 +66,13 @@ feature 'Create answer', %q{
       end
     end
 
-    scenario 'answers appear on another user\'s page' do 
+    scenario 'answers appear on another user\'s page', js: true do 
       Capybara.using_session('guest') do 
         expect(page).to have_content 'Answer text'         
       end
     end
 
-    scenario 'answer apears only on it\'s question page' do 
+    scenario 'answer apears only on it\'s question page', js: true do 
       Capybara.using_session('guest2') do       
         expect(page).to_not have_content 'Answer text' 
       end

@@ -53,4 +53,49 @@ feature 'Add comments', %q{
       expect(page).to have_content comment2.body
     end
   end
+
+  given!(:question2) { create(:question) }
+
+  describe 'Multiple sessions' do 
+    before do 
+      Capybara.using_session('user') do 
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do 
+        visit question_path(question)      
+      end
+
+      Capybara.using_session('guest2') do 
+        visit question_path(question2)
+      end
+
+      Capybara.using_session('user') do 
+        visit question_path(question)
+        within '.question .comments' do 
+          fill_in 'Comment text', with: 'Question comment'
+          click_on 'Add comment'
+          expect(page).to have_content 'Question comment'
+        end
+        expect(page).to have_content 'Your comment cussessfully created'          
+      end
+    end
+
+    scenario 'answers appear on another user\'s page', js: true do 
+      Capybara.using_session('guest') do 
+        within '.question .comments' do
+          expect(page).to have_content 'Question comment'         
+        end
+      end
+    end
+
+    scenario 'answer apears only on it\'s question page', js: true do 
+      Capybara.using_session('guest2') do       
+        within '.question .comments' do
+          expect(page).to_not have_content 'Question comment' 
+        end
+      end
+    end 
+  end
 end

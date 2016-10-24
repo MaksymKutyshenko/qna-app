@@ -11,7 +11,6 @@ ready = ->
     connected: ->
       @perform 'follow', question_id: gon.question.id
     received: (data) -> 
-      console.log(data.answer)
       $('.answers').append(App.helper.render('answers/answer', data.answer))
   })
 
