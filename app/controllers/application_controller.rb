@@ -4,6 +4,6 @@ class ApplicationController < ActionController::Base
 
   private
   def gon_user
-    gon.user_id = current_user ? current_user.id : nil
+    gon.user_id = current_user.try(:id)
   end
 end
