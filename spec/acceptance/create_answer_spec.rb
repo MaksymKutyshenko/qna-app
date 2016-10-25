@@ -39,6 +39,46 @@ feature 'Create answer', %q{
     expect(page).to have_content 'Body can\'t be blank'    
   end
 
+  given!(:question2) { create(:question) }
+
+  context 'multiple sessions', js: true do 
+    before do 
+      Capybara.using_session('user') do 
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do 
+        visit question_path(question)      
+      end
+
+      Capybara.using_session('guest2') do 
+        visit question_path(question2)
+      end
+
+      Capybara.using_session('user') do 
+        fill_in 'Your answer', with: 'Answer text'
+        click_on('Create answer')
+        expect(page).to have_content 'Your answer successfully created'    
+        within '.answers' do 
+          expect(page).to have_content 'Answer text'    
+        end           
+      end
+    end
+
+    scenario 'answers appear on another user\'s page', js: true do 
+      Capybara.using_session('guest') do 
+        expect(page).to have_content 'Answer text'         
+      end
+    end
+
+    scenario 'answer apears only on it\'s question page', js: true do 
+      Capybara.using_session('guest2') do       
+        expect(page).to_not have_content 'Answer text' 
+      end
+    end 
+  end
+
   scenario 'Non-authenticated user does not create answers', js: true do 
     visit question_path(question)
     expect(page).to_not have_button 'Create answer'

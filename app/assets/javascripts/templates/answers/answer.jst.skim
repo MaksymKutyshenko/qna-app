@@ -1,0 +1,32 @@
+- if @best
+  - @classname = ' best-answer'
+- else
+  - @classname = ''
+
+.answer class="answer-#{@id}#{@classname}"  
+  .answer-body = @body
+
+  - if @attachments.length > 0
+    == App.helper.render('shared/attachments', {attachable: @, attachments: @attachments})     
+
+  == App.helper.render('shared/raiting', {votable: @, path: "/answers/#{@id}"})
+
+  -if gon.user_id && gon.user_id == gon.question.user_id && !@best    
+    p
+      a data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@id}/best" Best
+  -if gon.user_id && gon.user_id == @user_id
+    p
+      a data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href="/answers/#{@id}" Delete
+    p
+      a class="edit-answer-link" data-answer-id="#{@id}" href="#" Edit
+    p
+      form id="edit-answer-#{@id}" class="edit_answer" action="/answers/#{@id}" accept-charset="UTF-8" data-remote="true" method="post" style="display: none;"
+        input name="utf8" type="hidden" value="✓"
+        input type="hidden" name="_method" value="patch"
+        p 
+          label for="answer_body" Answer
+        p
+          textarea name="answer[body]" id="answer_body" = @body
+        p
+          input type="submit" name="commit" value="Save" data-disable-with="Save"
+            

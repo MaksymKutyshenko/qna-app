@@ -16,6 +16,11 @@
 //= require turbolinks
 //= require_tree .
 //= require tether
+//= require action_cable
 //= require bootstrap-sprockets
 //= require bootstrap
 //= require cocoon
+//= require skim
+
+var App = App || {};
+App.cable = ActionCable.createConsumer();

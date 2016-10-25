@@ -1,0 +1,9 @@
+$('.new_comment textarea').val('');
+$('.alert').html('');
+$('.notice').html('');
+
+<% if @comment.errors.present? %>
+  $('.alert').html("<%= @comment.errors.full_messages.to_sentence %>");
+<% else %>
+  $('.notice').html('Your comment cussessfully created'); 
+<% end %>

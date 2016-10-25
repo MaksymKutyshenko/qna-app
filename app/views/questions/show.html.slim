@@ -7,7 +7,15 @@ div.card.card-block.question
   p Attachments:
   div
     - @question.attachments.each do |attachment|
-      = render attachment        
+      = render attachment    
+
+  
+  div class="comments comments-#{@question.id}"
+    - if user_signed_in? 
+      = render 'comments/form', commentable: @question
+    - if @question.comments.any?
+      = render @question.comments
+
 
   - if user_signed_in? && current_user.author_of?(@question)
     = link_to 'Delete', @question, method: :delete
@@ -35,5 +43,4 @@ div.card.card-block.question
 
 .answers
   - if @question.answers.any?
-    = render @question.answers
-  
+    = render @question.answers  

@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   end
 
   resources :questions do
+    resources :comments, shallow: true
     resources :answers, shallow: true do 
+      resources :comments, shallow: true
       post :best, on: :member
       concerns :votable
     end
@@ -16,4 +18,6 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: [:destroy]  
+
+  mount ActionCable.server => '/cable'
 end

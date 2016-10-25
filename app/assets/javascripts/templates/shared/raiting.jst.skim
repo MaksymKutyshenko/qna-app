@@ -1,0 +1,12 @@
+.rating-block 
+  | Rating is
+  span< class=("rating-value") 0
+  - if gon.user_id
+    p
+      a.unrate-button data-remote="true" style="display: none;" rel="nofollow" data-method="delete" href="#{@path}/unrate" 
+        | Unvote
+      a.rate-button data-remote="true" rel="nofollow" data-method="patch" href="#{@path}/rate?rating=1" 
+        | Vote up
+      a.rate-button data-remote="true" rel="nofollow" data-method="patch" href="#{@path}/rate?rating="
+        | Vote down
+

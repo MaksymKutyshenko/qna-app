@@ -1,0 +1,7 @@
+p 
+  | Attachments: 
+  div 
+    - for a in @attachments
+      a href="#{a.file.url}" = a.file.url.split('/').pop()  
+      - if gon.user_id && gon.user_id == @attachable.user_id
+        a data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href="/attachments/#{a.id}" Delete file 
