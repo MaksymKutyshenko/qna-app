@@ -24,7 +24,7 @@ feature 'Delete files', %q{
         click_link 'Delete file'
       end
 
-      expect(page).to have_content 'Attachment has been successfully deleted'
+      expect(page).to have_content 'Attachment was successfully destroyed.'
       expect(page).to_not have_link attachment.file.filename
     end
 

@@ -15,7 +15,7 @@ feature 'User deletes question', %q{
     click_link 'Delete'
     expect(page).to_not have_content question.title
     expect(page).to_not have_content question.body
-    expect(page).to have_content 'Your question has been successfully deleted!'
+    expect(page).to have_content 'Question was successfully destroyed.'
   end
 
   scenario 'Authenticated user is trying to delete not his question' do

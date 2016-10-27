@@ -4,56 +4,42 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :update, :destroy]
   before_action :gon_question, only: [:show]
+  before_action :build_answer, only: [:show]
 
   after_action :publish_question, only: [:create]
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
-  def show
-    @answer = Answer.new
-    @answer.attachments.build  
+  def show 
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def create
-    @question = Question.create(question_params.merge(user: current_user))
-    if @question.errors.blank?
-      flash[:notice] = 'Your question successfully created'
-      redirect_to @question
-    else      
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
 
   def update
     if current_user.author_of?(@question)
-      if @question.update(question_params)
-        flash[:notice] = 'Your question has been successfully updated'
-      else
-        flash[:alert] = 'Your question has not been updated'
-      end
+      @question.update(question_params)
+      respond_with(@question)   
     else
       flash[:alert] = 'You have no rights to perform this action'
-    end    
+    end
   end
 
   def destroy
     if current_user.author_of?(@question)
-      if @question.destroy
-        flash[:notice] = 'Your question has been successfully deleted!'
-      else
-        flash[:alert] = 'Your question has not been deleted'
-      end
+      @question.destroy      
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
-    redirect_to questions_path
+    respond_with(@question)
   end
 
   private
@@ -67,6 +53,10 @@ class QuestionsController < ApplicationController
         locals: { question: @question }
       )
     ) 
+  end
+
+  def build_answer 
+    @answer = Answer.new
   end
 
   def gon_question

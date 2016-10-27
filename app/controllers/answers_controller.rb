@@ -7,28 +7,21 @@ class AnswersController < ApplicationController
   after_action :publish_answer, only: [:create]
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
-    if @answer.errors.blank?
-      flash[:notice] = 'Your answer successfully created'
-    end
+    respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update  
     if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      flash[:notice] = 'Answer has been successfully updated'
+      @answer.update(answer_params)   
+      respond_with(@answer)  
     else
       flash[:alert] = 'You have no rights to perform this action'
-    end
+    end    
   end
 
   def destroy
     if current_user.author_of?(@answer)
-      if @answer.destroy
-        flash[:notice] = 'Answer has been successfully deleted'
-      else
-        flash[:alert] = 'Answer has not been deleted'
-      end
+      respond_with(@answer.destroy)
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
@@ -37,8 +30,7 @@ class AnswersController < ApplicationController
   def best
     @question = @answer.question
     if current_user.author_of?(@question)
-      @answer.best!
-      flash[:notice] = 'Best answer chosen!'
+      respond_with(@answer.best!)
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
