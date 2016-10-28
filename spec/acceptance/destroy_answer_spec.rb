@@ -14,7 +14,7 @@ feature 'User deletes answer', %q{
     sign_in(user)
     visit question_path(question)
     click_on 'Delete'
-    expect(page).to have_content 'Answer has been successfully deleted'
+    expect(page).to have_content 'Answer was successfully destroyed.'
     expect(page).to_not have_content answer.body
   end
 

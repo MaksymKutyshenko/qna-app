@@ -9,7 +9,7 @@
     = f.text_area(:body, class: 'form-control') 
     p Attachments:
     p
-      = f.fields_for :attachments do |a|
+      = f.fields_for :attachments, @question.attachments.build do |a|
         = a.label :file
         = a.file_field :file
         = link_to_add_association 'add file', f, :attachments

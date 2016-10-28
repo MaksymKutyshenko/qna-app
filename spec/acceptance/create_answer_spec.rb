@@ -14,7 +14,7 @@ feature 'Create answer', %q{
     visit question_path(question)
     fill_in 'Your answer', with: 'Answer text'
     click_on('Create answer')
-    expect(page).to have_content 'Your answer successfully created'    
+    expect(page).to have_content 'Answer was successfully created.'    
     within '.answers' do 
       expect(page).to have_content 'Answer text'    
     end
@@ -59,7 +59,7 @@ feature 'Create answer', %q{
       Capybara.using_session('user') do 
         fill_in 'Your answer', with: 'Answer text'
         click_on('Create answer')
-        expect(page).to have_content 'Your answer successfully created'    
+        expect(page).to have_content 'Answer was successfully created.'    
         within '.answers' do 
           expect(page).to have_content 'Answer text'    
         end           

@@ -23,13 +23,13 @@ feature 'Answer editing', %q{
       within '.answers' do
         fill_in 'Answer', with: 'edited answer'
         click_on 'Save'
-
+        
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_css "#edit-answer-#{answer.id}"
       end
 
-      expect(page).to have_content 'Answer has been successfully updated'
+      expect(page).to have_content 'Answer was successfully updated.'
     end
 
     scenario 'tries to edit his answer with invalid params', js: true do
@@ -40,7 +40,7 @@ feature 'Answer editing', %q{
         click_on 'Save'
         
         expect(page).to have_content answer.body
-        expect(page).to have_selector 'textarea'
+        expect(page).to have_css "#edit-answer-#{answer.id}"
       end
 
       expect(page).to have_content "Body can't be blank"

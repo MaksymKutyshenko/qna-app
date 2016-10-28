@@ -27,7 +27,7 @@ feature 'Question editing', %q{
         expect(page).to have_content 'New text'
         expect(page).to_not have_selector '.edit_question'
       end
-      expect(page).to have_content 'Your question has been successfully updated'
+      expect(page).to have_content 'Question was successfully updated.'
     end
 
     scenario 'tries to edit other user\'s question' do 
