@@ -1,0 +1,4 @@
+= form_tag auth_confirmations_path, method: "post" do 
+  = label_tag :email, "Enter your email"
+  = text_field_tag :email, nil, required: true
+  = submit_tag "Confirm"

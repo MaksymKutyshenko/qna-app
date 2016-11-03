@@ -72,6 +72,14 @@ RSpec.describe User do
           expect(authentication.uid).to eq auth.uid
         end
       end
+
+      context 'when email in auth hash is empty' do 
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', info: {}) }
+        it 'returns new user instance' do 
+          user = User.find_for_oauth(auth)
+          expect(user).to be_a_new(User)
+        end
+      end
     end
   end
 end

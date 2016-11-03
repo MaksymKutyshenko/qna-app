@@ -23,8 +23,9 @@ class User < ApplicationRecord
     return authorization.user if authorization
 
     email = auth.info['email']
-    user = User.where(email: email).first
-    if user
+    return User.new unless email.present?
+
+    if user = User.where(email: email).first  
       user.create_authorization(auth)
     else
       password = Devise.friendly_token[0, 20]
