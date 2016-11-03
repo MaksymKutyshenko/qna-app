@@ -18,7 +18,7 @@ feature 'Auth with facebook', %q{
       OmniAuth.config.mock_auth[:facebook] = :invalid_credentials
       visit new_user_session_path
       click_link "Sign in with Facebook"
-      page.should have_content('Could not authenticate you from Facebook because "Invalid credentials".')
+      expect(page).to have_content('Could not authenticate you from Facebook because "Invalid credentials".')
     end
   end
 

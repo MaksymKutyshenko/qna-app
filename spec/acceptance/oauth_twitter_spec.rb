@@ -25,7 +25,7 @@ feature 'Twitter authorization', %q{
       OmniAuth.config.mock_auth[:twitter] = :invalid_credentials
       visit new_user_session_path
       click_link "Sign in with Twitter"
-      page.should have_content('Could not authenticate you from Twitter because "Invalid credentials".')
+      expect(page).to have_content('Could not authenticate you from Twitter because "Invalid credentials".')
     end
   end
 end
