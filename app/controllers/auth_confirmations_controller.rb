@@ -3,6 +3,8 @@ class AuthConfirmationsController < ApplicationController
   after_action :remove_omniauth_session, only: [:finish]
   before_action :load_oauth_user, only: [:finish]
 
+  skip_authorization_check
+
   def create   
     if session_valid? && params[:email].present?
       UserMailer.confirmation_mail(params[:email], session[:omniauth]['auth_token']).deliver_now

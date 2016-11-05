@@ -3,6 +3,8 @@ class CommentsController < ApplicationController
   before_action :set_commentable, only: [:create]
   after_action :publish_comment, only: [:create]
 
+  authorize_resource
+
   def create
     respond_with(@comment = @commentable.comments.create(commet_params.merge(user: current_user)))
   end

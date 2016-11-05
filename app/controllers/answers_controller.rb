@@ -6,34 +6,24 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:update, :destroy, :best]
   after_action :publish_answer, only: [:create]
 
+  authorize_resource
+
   def create
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update  
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)   
-      respond_with(@answer)  
-    else
-      flash[:alert] = 'You have no rights to perform this action'
-    end    
+    @answer.update(answer_params)   
+    respond_with(@answer)      
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      respond_with(@answer.destroy)
-    else
-      flash[:alert] = 'You have no rights to perform this action'
-    end
+    respond_with(@answer.destroy)
   end
 
   def best
-    @question = @answer.question
-    if current_user.author_of?(@question)
-      respond_with(@answer.best!)
-    else
-      flash[:alert] = 'You have no rights to perform this action'
-    end
+    @question = @answer.question   
+    respond_with(@answer.best!)
   end
 
   private
