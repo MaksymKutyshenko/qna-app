@@ -6,21 +6,15 @@ module Voted
   end
 
   def rate
-    unless current_user.author_of?(@votable)
-      @votable.rate(current_user, params[:rating])
-      render json: { votable: @votable, rating: @votable.rating, message: "You have rated #{controller_name.singularize} with: #{params[:rating]}" }
-    else
-      render json: { errors: ["You can not rate your own #{controller_name.singularize}"] }, status: :forbidden
-    end
+    authorize! :rate, @votable
+    @votable.rate(current_user, params[:rating])
+    render json: { votable: @votable, rating: @votable.rating, message: "You have rated #{controller_name.singularize} with: #{params[:rating]}" }
   end
 
   def unrate
-    if current_user.voted_for?(@votable)
-      @votable.unrate(current_user)
-      render json: { votable: @votable, message: 'Vote has been successfully removed', rating: @votable.rating }
-    else
-      render json: { errors: ['Vote can not be deleted'] }, status: :forbidden
-    end
+    authorize! :unrate, @votable
+    @votable.unrate(current_user)
+    render json: { votable: @votable, message: 'Vote has been successfully removed', rating: @votable.rating }
   end
 
   private

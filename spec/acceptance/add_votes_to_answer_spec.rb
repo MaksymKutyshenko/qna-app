@@ -38,7 +38,7 @@ feature 'Add votes to answer', %q{
         click_link 'Vote down'
         expect(page).to have_content 'Rating is 0'
       end
-      expect(page).to have_content 'You can not rate your own answer'
+      expect(page).to have_content 'You have no rights to perform this action'
     end
 
     scenario 'is trying to rate answer two times', js: true do 

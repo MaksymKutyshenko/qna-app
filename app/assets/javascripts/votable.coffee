@@ -1,5 +1,5 @@
 handleRateErrors = (e, xhr) ->
-  $('.alert, .notice').text('')
+  $('.alert, .notice').text('') 
   responseObject = $.parseJSON(xhr.responseText)
   $.each responseObject.errors, (i, e) ->
     $('.alert').append e

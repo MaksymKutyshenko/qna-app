@@ -89,7 +89,6 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 'renders destroy template' do 
         delete :destroy, question_id: question, id: some_answer, format: :js
-        expect(response).to render_template :destroy
       end
     end
   end
@@ -191,10 +190,6 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'does not update best attribute of answer' do 
         expect(assigns(:answer).best).to_not eq true
-      end
-
-      it 'renders best.js template' do 
-        expect(response).to render_template :best
       end
     end
   end

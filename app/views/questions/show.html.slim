@@ -11,14 +11,16 @@ div.card.card-block.question
 
   
   div class="comments comments-#{@question.id}"
-    - if user_signed_in? 
+    - if can?(:create, Comment) 
       = render 'comments/form', commentable: @question
     - if @question.comments.any?
       = render @question.comments
 
 
-  - if user_signed_in? && current_user.author_of?(@question)
+  - if can?(:destroy, @question)
     = link_to 'Delete', @question, method: :delete
+    
+  - if can?(:update, @question)
     = link_to 'Edit', '', class: 'edit-question-link'
     p
       = form_for @question, remote: true do |f|
@@ -28,7 +30,7 @@ div.card.card-block.question
         p= f.text_area :body
         p= f.submit 'Save'
         
-  - if user_signed_in?
+  - if can?(:create, Answer)
     = form_for [@question, @answer], remote: true do |f|
       .form-errors
       div= f.label :body, 'Your answer'

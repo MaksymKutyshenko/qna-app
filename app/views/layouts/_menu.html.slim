@@ -1,8 +1,9 @@
 nav [class="navbar navbar-default"]
   div.container-fluid
     a< href="#{questions_path}" Questions 
-    a< href="#{new_question_path}" 
-      | Ask question       
+    - if can?(:create, Question)
+      a< href="#{new_question_path}" 
+        | Ask question       
     - unless current_user
         a< href="#{ user_session_path }"
           | Sign in
