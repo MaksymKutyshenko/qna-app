@@ -189,7 +189,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'responses with status 403' do 
-        delete :unrate, params: { id: question }
+        delete :unrate, params: { id: question }, format: :json
         expect(response.status).to eq(403)
       end
     end
@@ -216,7 +216,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'responses with status 403' do 
-        delete :destroy, params: { id: some_user.questions.first }
+        delete :destroy, params: { id: some_user.questions.first }, format: :json
         expect(response.status).to eq(403)
       end
     end

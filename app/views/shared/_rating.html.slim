@@ -5,6 +5,6 @@
   - if can?(:create, Vote)    
     p
       - voted = current_user.voted_for?(votable)      
-      = link_to 'Unvote', polymorphic_path(votable, action: :unrate), method: :delete, remote: true, class: 'unrate-button', style: "#{voted ? '' : 'display: none;'}"
-      = link_to 'Vote up', polymorphic_path(votable, action: :rate, rating: 1), method: :patch, remote: true, class: 'rate-button', style: "#{voted ? 'display: none;' : ''}"
-      = link_to 'Vote down', polymorphic_path(votable, action: :rate, rating: -1), method: :patch, remote: true, class: 'rate-button', style: "#{voted ? 'display: none;' : ''}"
+      = link_to 'Unvote', polymorphic_path(votable, action: :unrate), method: :delete, remote: true, 'data-type' => 'json', class: 'unrate-button', style: "#{voted ? '' : 'display: none;'}"
+      = link_to 'Vote up', polymorphic_path(votable, action: :rate, rating: 1), method: :patch, remote: true, 'data-type' => 'json', class: 'rate-button', style: "#{voted ? 'display: none;' : ''}"
+      = link_to 'Vote down', polymorphic_path(votable, action: :rate, rating: -1), method: :patch, remote: true, 'data-type' => 'json', class: 'rate-button', style: "#{voted ? 'display: none;' : ''}"

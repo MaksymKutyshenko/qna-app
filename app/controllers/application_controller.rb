@@ -10,13 +10,12 @@ class ApplicationController < ActionController::Base
   check_authorization :unless => :devise_controller?
 
   rescue_from CanCan::AccessDenied do |exception|
-    if ['votes', 'rate', 'unrate', 'destroy'].include? self.action_name
-      render json: { errors: ['You have no rights to perform this action'] }, status: :forbidden
-    else
-      redirect_to root_url, alert: exception.message 
+    respond_to do |format|
+      format.js { render 'shared/access_denied', status: :forbidden }
+      format.json { render json: { errors: ['You have no rights to perform this action'] }, status: :forbidden }
+      format.html { redirect_to root_url, alert: exception.message }
     end
   end
-
 
   private
   def gon_user
