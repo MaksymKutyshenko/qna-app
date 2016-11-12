@@ -9,7 +9,7 @@ class Ability
     if user
       user.admin? ? admin_abilities : user_abilities
     else
-      guest_abilities      
+      guest_abilities
     end
 
   end
@@ -22,23 +22,24 @@ class Ability
     can :manage, :all
   end
 
-  def user_abilities    
+  def user_abilities
     guest_abilities
     can :create, [Question, Answer, Comment, Vote]
     can :update, [Question, Answer, Vote], user_id: user.id
     can :destroy, [Question, Answer, Vote], user_id: user.id
-    
+    can [:me, :index], User
+
     can :destroy, Attachment do |attachment|
       user.author_of?(attachment.attachable)
-    end 
+    end
     can :best, Answer do |answer|
       user.author_of?(answer.question)
-    end 
+    end
     can :rate, [Question, Answer] do |votable|
       !user.author_of?(votable)
-    end 
+    end
     can :unrate, [Question, Answer] do |votable|
       user.voted_for?(votable)
-    end    
+    end
   end
 end
