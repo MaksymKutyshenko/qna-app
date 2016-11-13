@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   root to: "questions#index"
 
-  concern :votable do 
+  concern :votable do
     patch :rate, on: :member
     delete :unrate, on: :member
   end
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :comments, shallow: true
-    resources :answers, shallow: true do 
+    resources :answers, shallow: true do
       resources :comments, shallow: true
       post :best, on: :member
       concerns :votable
@@ -23,16 +23,18 @@ Rails.application.routes.draw do
     concerns :votable
   end
 
-  namespace :api do 
-    namespace :v1 do 
-      resources :profiles do 
+  namespace :api do
+    namespace :v1 do
+      resources :profiles do
         get :me, on: :collection
-        get :index, on: :collection
+      end
+      resources :questions, on: :member do
+        resources :answers, shallow: true
       end
     end
   end
 
-  resources :attachments, only: [:destroy]  
+  resources :attachments, only: [:destroy]
 
   mount ActionCable.server => '/cable'
 end
