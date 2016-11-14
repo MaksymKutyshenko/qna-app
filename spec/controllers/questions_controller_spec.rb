@@ -4,37 +4,39 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
   let(:gon) { RequestStore.store[:gon].gon }
 
-  describe 'GET #index' do    
+  it_behaves_like 'voted', resource: :question
+
+  describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
 
     before { get :index }
 
-    it 'pupulaes an array of all questions' do 
+    it 'pupulaes an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
 
     it 'renders index view' do
-      expect(response).to render_template :index  
+      expect(response).to render_template :index
     end
   end
 
   describe 'GET #show' do
     before { get :show, params: { id: question } }
 
-    it 'assigns the requested question to @question' do 
+    it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
 
-    it 'builds new answer' do 
+    it 'builds new answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'assigns @question to gon.question' do 
+    it 'assigns @question to gon.question' do
       expect(gon['question']).to eq question
     end
 
-    it 'renders show view' do 
-      expect(response).to render_template :show  
+    it 'renders show view' do
+      expect(response).to render_template :show
     end
   end
 
@@ -43,30 +45,35 @@ RSpec.describe QuestionsController, type: :controller do
 
     before { get :new }
 
-    it 'assigns a new Question to @qestion' do 
+    it 'assigns a new Question to @qestion' do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
-    it 'renders new view' do 
+    it 'renders new view' do
       expect(response).to render_template :new
     end
-  end 
+  end
 
   describe 'POST #create' do
     sign_in_user
-    context 'when attributes are valid' do 
+    context 'when attributes are valid' do
       it 'saves the new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
 
       it 'assigns current user to question' do
-        post :create, params: { question: attributes_for(:question) } 
+        post :create, params: { question: attributes_for(:question) }
         expect(assigns(:question).user_id).to eq @user.id
       end
 
-      it 'redirects to show view' do 
+      it 'redirects to show view' do
          post :create, params: { question: attributes_for(:question) }
-         expect(response).to redirect_to question_path(assigns(:question)) 
+         expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+      it 'should publish_question after creating' do
+        expect(ActionCable.server).to receive(:broadcast)
+        post :create, params: { question: attributes_for(:question) }
       end
     end
 
@@ -74,25 +81,31 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not save the question' do
         expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
       end
+
       it 're-renders new view' do
         post :create, params: { question: attributes_for(:invalid_question) }
         expect(response).to render_template :new
       end
-    end
-  end  
 
-  describe 'PATCH #update' do 
+      it 'ActionCable.server should not broadcast after creating' do
+        expect(ActionCable.server).to_not receive(:broadcast)
+        post :create, params: { question: attributes_for(:invalid_question) }
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
     sign_in_user
     before { question.update(user: @user) }
 
-    context 'valid attributes' do 
+    context 'valid attributes' do
       before { patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js }
 
-      it 'assigns the requested question to @question' do 
+      it 'assigns the requested question to @question' do
         expect(assigns(:question)).to eq question
       end
-      
-      it 'changes question attributes' do 
+
+      it 'changes question attributes' do
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
@@ -103,10 +116,10 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when invalid attributes' do 
+    context 'when invalid attributes' do
       before { patch :update, params: { id: question, question: { title: 'new title', body: nil } }, format: :js }
 
-      it 'does not change question attributes' do 
+      it 'does not change question attributes' do
         question.reload
         expect(question.title).to_not eq 'new title'
         expect(question.body).to_not eq nil
@@ -117,10 +130,10 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when current user is not owner' do 
+    context 'when current user is not owner' do
       let(:some_user) { create(:user) }
 
-      it 'does not change question attributes' do 
+      it 'does not change question attributes' do
         question.update(user: some_user)
         patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
         question.reload
@@ -130,92 +143,27 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'PATCH #rate' do
-    sign_in_user
-
-    context 'when user is not owner' do 
-      it 'updates question votes count' do 
-        expect { patch :rate, params: { id: question, rating: 1 }, format: :json }.to change(question.votes, :count).by(1)
-      end
-
-      it 'sets question rating to be equal 1' do
-        patch :rate, params: { id: question, rating: 1 }, format: :json
-        expect(assigns(:votable).rating).to eq(1)
-      end
-
-      it 'sets question rating to be equal -1' do
-        patch :rate, params: { id: question, rating: -1 }, format: :json
-        expect(assigns(:votable).rating).to eq(-1)
-      end
-
-      it 'responses with status code 200' do
-        patch :rate, params: { id: question, rating: -1 }, format: :json
-        expect(response.status).to eq(200)
-      end
-    end
-
-    context 'when user is owner' do 
-      before { question.update(user: @user) }
-
-      it 'does not sets question rating' do 
-        patch :rate, params: { id: question, rating: 1 }, format: :json
-        expect(assigns(:votable).rating).to eq(0)          
-      end
-      it 'responses with status 403' do
-        patch :rate, params: { id: question, rating: 1 }, format: :json
-        expect(response.status).to eq(403)
-      end
-    end
-  end
-
-  describe 'DELETE #unrate' do
-    sign_in_user
-    let!(:question) { create(:question) }
-
-    context 'when user is vote owner', format: :json do 
-      let!(:vote) { create(:vote, user: @user, rating: 1, votable: question) }
-      it 'remove question vote' do
-        expect { delete :unrate, params: { id: question } }.to change(Vote, :count).by(-1)
-      end
-      
-      it 'responses with status 200' do 
-        expect(response.status).to eq(200)
-      end  
-    end
-
-    context 'when user is not vote owner', format: :json do 
-      it 'does not delete vote' do
-        expect { delete :unrate, params: { id: question } }.to_not change(Vote, :count)
-      end
-
-      it 'responses with status 403' do 
-        delete :unrate, params: { id: question }, format: :json
-        expect(response.status).to eq(403)
-      end
-    end
-  end
-
-  describe 'DELETE #destroy' do 
+  describe 'DELETE #destroy' do
     sign_in_user
 
     context 'when current user is owner' do
       before { question.update_attribute(:user_id, @user.id) }
-      it 'deletes question' do      
+      it 'deletes question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
-      it 'redirect to index view' do 
+      it 'redirect to index view' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
       end
     end
-    
+
     context 'when current user is not owner' do
       let!(:some_user) { create(:user_with_questions) }
-      it 'does not delete question' do              
+      it 'does not delete question' do
         expect { delete :destroy, params: { id: some_user.questions.first } }.to_not change(Question, :count)
       end
 
-      it 'responses with status 403' do 
+      it 'responses with status 403' do
         delete :destroy, params: { id: some_user.questions.first }, format: :json
         expect(response.status).to eq(403)
       end
