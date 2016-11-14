@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   include Voted
-  
+
   before_action :authenticate_user!
   before_action :find_question, only: [:create]
   before_action :load_answer, only: [:update, :destroy, :best]
@@ -12,9 +12,9 @@ class AnswersController < ApplicationController
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
-  def update  
-    @answer.update(answer_params)   
-    respond_with(@answer)      
+  def update
+    @answer.update(answer_params)
+    respond_with(@answer)
   end
 
   def destroy
@@ -22,16 +22,16 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @question = @answer.question   
+    @question = @answer.question
     respond_with(@answer.best!)
   end
 
   private
-  
+
   def publish_answer
     return if @answer.errors.any?
     ActionCable.server.broadcast(
-      "answers_for_#{@question.id}", 
+      "answers_for_#{@question.id}",
       { answer: @answer.attributes.merge(attachments: @answer.attachments) }
     )
   end
