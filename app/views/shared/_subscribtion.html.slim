@@ -1,0 +1,16 @@
+- if can?(:subscribe, subscribable) && can?(:unsubscribe, subscribable)
+  .subscribtion-block
+    - subscribed = current_user.subscribed?(subscribable)
+    = link_to 'Subscribe', polymorphic_path(subscribable, action: :subscribe),
+        method: :post,
+        remote: true,
+        'data-type' => 'json',
+        class: 'subscribe-button',
+        style: "#{subscribed ? 'display: none;' : ''}"
+
+    = link_to 'Unsubscribe', polymorphic_path(subscribable, action: :unsubscribe),
+          method: :delete,
+          remote: true,
+          'data-type' => 'json',
+          class: 'unsubscribe-button',
+          style: "#{subscribed ? '' : 'display: none;'}"

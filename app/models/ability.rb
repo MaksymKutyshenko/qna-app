@@ -27,6 +27,8 @@ class Ability
     can :create, [Question, Answer, Comment, Vote]
     can :update, [Question, Answer, Vote], user_id: user.id
     can :destroy, [Question, Answer, Vote], user_id: user.id
+    can :subscribe, [Question]
+    can :unsubscribe, [Question]
     can [:me, :index], User
 
     can :destroy, Attachment do |attachment|

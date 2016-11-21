@@ -39,6 +39,8 @@ describe Ability do
     it { should be_able_to :read, :all }
 
     it { should be_able_to :create, Question }
+    it { should be_able_to :subscribe, Question }
+    it { should be_able_to :unsubscribe, Question }
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
     it { should be_able_to :create, Vote }

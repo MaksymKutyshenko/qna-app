@@ -5,6 +5,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:gon) { RequestStore.store[:gon].gon }
 
   it_behaves_like 'voted', resource: :question
+  it_behaves_like 'subscribed', resource: :question
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
