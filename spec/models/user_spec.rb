@@ -111,6 +111,20 @@ RSpec.describe User do
     end
   end
 
+  describe 'subscribtion_for' do
+    let!(:user) { create(:user) }
+    let!(:subscriber) { create(:user) }
+    let!(:subscribable) { create(:question) }
+    let!(:subscribtion) { create(:subscribtion, subscribable: subscribable, user: subscriber) }
+
+    it 'returns subscribtion' do
+      expect(subscriber.subscribtion_for(subscribable)).to eq subscribtion
+    end
+    it 'returns nil' do
+      expect(user.subscribtion_for(subscribable)).to be_falsey
+    end
+  end
+
   describe 'subscribe' do
     let!(:subscriber) { create(:user) }
     let!(:subscribable) { create(:question) }
@@ -124,19 +138,5 @@ RSpec.describe User do
         subscriber.subscribe(subscribable)
       }.to change(Subscribtion, :count).by(1)
     end
-  end
-
-  describe 'unsubscribe' do
-    let!(:subscriber) { create(:user) }
-    let!(:user) { create(:user) }
-    let!(:subscribable) { create(:question) }
-    let!(:subscribtion) { create(:subscribtion, subscribable: subscribable, user: subscriber ) }
-
-    it 'deletes subscription' do
-      expect { subscriber.unsubscribe(subscribable) }.to change(Subscribtion, :count).by(-1)
-    end
-    it 'does not delete subscription if user is not subscriber' do
-      expect { user.unsubscribe(subscribable)  }.to change(Subscribtion, :count).by(0)
-    end
-  end
+  end  
 end

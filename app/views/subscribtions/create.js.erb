@@ -1,0 +1,8 @@
+$('.alert, .notice').text('')
+$('.notice').html("<%= notice %>");
+
+<% if @subscribtion.errors.any? %>
+  $('.alert').html("<%= j @subscribtions.errors.full_messages.to_sentence %>");
+<% else %>
+  $('.subscribtion-block').html('<%= render "subscribtions/subscribtion", question: @question %>')
+<% end %>

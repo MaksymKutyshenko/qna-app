@@ -15,11 +15,6 @@ Rails.application.routes.draw do
     delete :unrate, on: :member
   end
 
-  concern :subscribed do
-    post :subscribe, on: :member
-    delete :unsubscribe, on: :member
-  end
-
   get '/auth_confirmations', to: 'auth_confirmations#finish'
   get '/auth_confirmations/new', to: 'auth_confirmations#new'
   post '/auth_confirmations', to: 'auth_confirmations#create'
@@ -32,8 +27,9 @@ Rails.application.routes.draw do
       concerns :votable
     end
     concerns :votable
-    concerns :subscribed
+    resources :subscribtions, only: [:create, :destroy], shallow: true
   end
+
 
   namespace :api do
     namespace :v1 do

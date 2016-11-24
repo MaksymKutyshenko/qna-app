@@ -3,7 +3,7 @@ div.card.card-block.question
   p.card-text.question-body= @question.body
 
   = render 'shared/rating', votable: @question
-  = render 'shared/subscribtion', subscribable: @question
+  = render 'subscribtions/subscribtion', question: @question
 
   p Attachments:
   div

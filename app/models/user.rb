@@ -50,13 +50,12 @@ class User < ApplicationRecord
     subscribtions.create(subscribable: subscribable) unless subscribed?(subscribable)
   end
 
-  def unsubscribe(subscribable)
-    subscription = subscribtions.find_by(subscribable: subscribable)
-    subscription.destroy if subscription.present?
-  end
-
   def subscribed?(subscribable)
     subscribtions.find_by(subscribable: subscribable).present?
+  end
+
+  def subscribtion_for(subscribable)
+    subscribtions.find_by(subscribable: subscribable)
   end
 
   def create_authorization(auth)

@@ -1,0 +1,13 @@
+- if can?(:create, Subscribtion) && can?(:destroy, Subscribtion)
+  .subscribtion-block
+    - subscription = current_user.subscribtion_for(question)
+    - unless subscription.present?
+      = link_to 'Subscribe', question_subscribtions_path(question),
+        method: :post,
+        remote: true,
+        class: 'subscribe-button'
+    - else
+      = link_to 'Unsubscribe', subscribtion_path(subscription),
+        method: :delete,
+        remote: true,
+        class: 'unsubscribe-button'
