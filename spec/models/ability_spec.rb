@@ -42,6 +42,9 @@ describe Ability do
     it { should be_able_to :create, Answer }
     it { should be_able_to :create, Comment }
     it { should be_able_to :create, Vote }
+    it { should be_able_to :create, Subscribtion }
+    it { should be_able_to :destroy, Subscribtion }
+
     it { should be_able_to :me, User }
     it { should be_able_to :index, User }
 

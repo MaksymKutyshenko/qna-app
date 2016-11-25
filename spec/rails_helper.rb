@@ -9,6 +9,9 @@ require 'shoulda-matchers'
 require 'with_model'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'sidekiq/testing'
+
+Sidekiq::Testing.fake!
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -33,11 +36,11 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
-  config.extend ControllerMacros, type: :controller # type - only for controllers 
-  config.extend WithModel 
-  
+  config.extend ControllerMacros, type: :controller # type - only for controllers
+  config.extend WithModel
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

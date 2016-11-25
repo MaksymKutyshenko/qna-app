@@ -8,7 +8,7 @@ gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0', '>= 5.0.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -51,9 +51,15 @@ gem 'doorkeeper'
 gem 'active_model_serializers'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'sidekiq'
+gem 'whenever', require: false
+gem 'sinatra', github: 'sinatra/sinatra', require: nil
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+group :test, :development do
+	gem 'rspec-rails'
+	gem 'factory_girl_rails'
+  gem 'capybara-webkit'
+  gem 'database_cleaner'
   gem 'byebug', platform: :mri
 end
 
@@ -67,14 +73,7 @@ group :development do
   gem 'letter_opener'
 end
 
-group :test, :development do
-	gem 'rspec-rails'
-	gem 'factory_girl_rails'
-  gem 'capybara-webkit'
-  gem 'database_cleaner'
-end
-
-group :test do 
+group :test do
   gem 'shoulda-matchers'
   gem 'with_model'
   gem 'capybara'

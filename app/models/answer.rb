@@ -9,6 +9,7 @@ class Answer < ApplicationRecord
   validates :body, :question_id, :user_id, presence: true
 
   accepts_nested_attributes_for :attachments, reject_if: :all_blank
+  after_create :notify_question_author
 
   def best!
     ActiveRecord::Base.transaction do
@@ -18,5 +19,11 @@ class Answer < ApplicationRecord
       end
       update!(best: true)
     end
+  end
+
+  private
+
+  def notify_question_author
+    QuestionSubscriberJob.perform_later(self.question)
   end
 end

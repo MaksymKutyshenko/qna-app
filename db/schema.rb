@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161106145711) do
+ActiveRecord::Schema.define(version: 20161119150747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,16 @@ ActiveRecord::Schema.define(version: 20161106145711) do
     t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
   end
 
+  create_table "subscribtions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "subscribable_type"
+    t.integer  "subscribable_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["subscribable_type", "subscribable_id"], name: "index_subscribtions_on_subscribable_type_and_subscribable_id", using: :btree
+    t.index ["user_id"], name: "index_subscribtions_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
@@ -116,7 +126,12 @@ ActiveRecord::Schema.define(version: 20161106145711) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
     t.boolean  "admin"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end

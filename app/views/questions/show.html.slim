@@ -3,39 +3,38 @@ div.card.card-block.question
   p.card-text.question-body= @question.body
 
   = render 'shared/rating', votable: @question
+  = render 'subscribtions/subscribtion', question: @question
 
   p Attachments:
   div
     - @question.attachments.each do |attachment|
-      = render attachment    
+      = render attachment
 
-  
   div class="comments comments-#{@question.id}"
-    - if can?(:create, Comment) 
+    - if can?(:create, Comment)
       = render 'comments/form', commentable: @question
     - if @question.comments.any?
       = render @question.comments
 
-
   - if can?(:destroy, @question)
     = link_to 'Delete', @question, method: :delete
-    
+
   - if can?(:update, @question)
     = link_to 'Edit', '', class: 'edit-question-link'
     p
       = form_for @question, remote: true do |f|
-        p= f.label :title 
-        p= f.text_field :title 
+        p= f.label :title
+        p= f.text_field :title
         p= f.label :body, 'Question text'
         p= f.text_area :body
         p= f.submit 'Save'
-        
+
   - if can?(:create, Answer)
     = form_for [@question, @answer], remote: true do |f|
       .form-errors
       div= f.label :body, 'Your answer'
       div= f.text_area :body
-      
+
       p= f.fields_for :attachments, @answer.attachments.build do |a|
         = a.label :file
         = a.file_field :file
@@ -45,4 +44,4 @@ div.card.card-block.question
 
 .answers
   - if @question.answers.any?
-    = render @question.answers  
+    = render @question.answers

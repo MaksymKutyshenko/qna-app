@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   include Voted
-
+  
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :update, :destroy]
   before_action :gon_question, only: [:show]
@@ -14,7 +14,7 @@ class QuestionsController < ApplicationController
     respond_with(@questions = Question.all)
   end
 
-  def show 
+  def show
     respond_with @question
   end
 
@@ -29,7 +29,7 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
-      respond_with(@question)   
+      respond_with(@question)
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
@@ -37,7 +37,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     if current_user.author_of?(@question)
-      @question.destroy      
+      @question.destroy
     else
       flash[:alert] = 'You have no rights to perform this action'
     end
@@ -46,18 +46,18 @@ class QuestionsController < ApplicationController
 
   private
 
-  def publish_question 
+  def publish_question
     return if @question.errors.any?
     ActionCable.server.broadcast(
-      'questions', 
+      'questions',
       ApplicationController.render(
         partial: 'questions/question',
         locals: { question: @question }
       )
-    ) 
+    )
   end
 
-  def build_answer 
+  def build_answer
     @answer = Answer.new
   end
 
