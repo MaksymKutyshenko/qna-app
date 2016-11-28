@@ -1,0 +1,9 @@
+= render 'search/form'
+- if @results.present?
+  - @results.each do |result|
+    - if result.instance_of?(User)
+      .search-result = result.email
+    - else
+      .search-result = result.body
+- else
+  | Records not found

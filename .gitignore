@@ -18,3 +18,5 @@
 .byebug_history
 config/database.yml
 dump.rdb
+config/*.sphinx.conf
+db/sphinx
