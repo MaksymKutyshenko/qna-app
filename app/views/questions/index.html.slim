@@ -1,7 +1,7 @@
-h1 Questions:
 .questions-list
   - if @questions.empty?
     | No questions found
-  - else 
+  - else
+    = render 'search/form'
+    h1 Questions:
     = render @questions
-     

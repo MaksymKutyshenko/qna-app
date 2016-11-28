@@ -54,6 +54,8 @@ gem 'oj_mimic_json'
 gem 'sidekiq'
 gem 'whenever', require: false
 gem 'sinatra', github: 'sinatra/sinatra', require: nil
+gem 'mysql2', '~> 0.4.2'
+gem 'thinking-sphinx'
 
 group :test, :development do
 	gem 'rspec-rails'
