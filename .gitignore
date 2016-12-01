@@ -19,4 +19,5 @@
 config/database.yml
 dump.rdb
 config/*.sphinx.conf
+config/thinking_sphinx.yml
 db/sphinx
