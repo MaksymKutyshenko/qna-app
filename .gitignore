@@ -17,6 +17,7 @@
 # Ignore Byebug command history file.
 .byebug_history
 config/database.yml
+config/cable.yml
 dump.rdb
 config/*.sphinx.conf
 config/thinking_sphinx.yml
