@@ -54,6 +54,8 @@ gem 'whenever', require: false
 gem 'sinatra', github: 'sinatra/sinatra', require: nil
 gem 'mysql2', '~> 0.4.2'
 gem 'thinking-sphinx'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
 
 group :test, :development do
 	gem 'rspec-rails'
@@ -75,8 +77,6 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
-  gem 'dotenv'
-  gem 'dotenv-deployment', require: 'dotenv/deployment'
 end
 
 group :test do
