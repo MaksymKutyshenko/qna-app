@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
-  it { should belong_to :question }
+  it { should belong_to(:question).touch(true) }
   it { should belong_to :user }
   it { should have_many(:attachments).dependent(:destroy) }
   it { should have_many(:votes).dependent(:destroy) }
