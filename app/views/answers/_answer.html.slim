@@ -1,4 +1,4 @@
-- cache answer do
+- cache [user_signed_in?, answer] do
   .answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
     .answer-body = answer.body
     = render 'shared/rating', votable: answer
