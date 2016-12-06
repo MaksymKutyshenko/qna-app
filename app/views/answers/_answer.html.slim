@@ -1,28 +1,29 @@
-.answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
-  .answer-body = answer.body
-  = render 'shared/rating', votable: answer
+- cache [user_signed_in?, answer] do
+  .answer class="answer-#{ answer.id }#{answer.best ? ' best-answer' : ''}"
+    .answer-body = answer.body
+    = render 'shared/rating', votable: answer
 
-  p Attachments:
-  div
-    - answer.attachments.each do |attachment|
-      = render attachment 
+    p Attachments:
+    div
+      - answer.attachments.each do |attachment|
+        = render attachment
 
-  - if can?(:best, answer) && !answer.best    
-      p= link_to 'Best', best_answer_path(answer), method: :post, remote: true
+    - if can?(:best, answer) && !answer.best
+        p= link_to 'Best', best_answer_path(answer), method: :post, remote: true
 
-  -if can?(:destroy, answer)
-    p= link_to 'Delete', answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
-  
-  -if can?(:update, answer)
-    p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-    p
-      = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-        p= f.label :body, 'Answer'
-        p= f.text_area :body     
-        p= f.submit 'Save'
+    -if can?(:destroy, answer)
+      p= link_to 'Delete', answer, method: :delete, data: { confirm: "Are you sure?" }, remote: true
 
-  div class="comments comments-#{answer.id}"
-    - if can?(:create, Comment)
-      = render 'comments/form', commentable: answer
-    - if answer.comments.any?
-      = render answer.comments
+    -if can?(:update, answer)
+      p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      p
+        = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+          p= f.label :body, 'Answer'
+          p= f.text_area :body
+          p= f.submit 'Save'
+
+    div class="comments comments-#{answer.id}"
+      - if can?(:create, Comment)
+        = render 'comments/form', commentable: answer
+      - if answer.comments.any?
+        = render answer.comments
